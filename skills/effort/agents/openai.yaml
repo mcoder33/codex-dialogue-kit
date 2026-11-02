@@ -1,0 +1,4 @@
+interface:
+  display_name: "Объём реализации"
+  short_description: "Сложность разработки и глубина проверок отдельно"
+  default_prompt: "Примени $effort low, checks focused для текущей задачи."
