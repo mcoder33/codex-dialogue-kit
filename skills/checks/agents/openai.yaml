@@ -1,0 +1,4 @@
+interface:
+  display_name: "Глубина проверки"
+  short_description: "Выбрать фокусную или тщательную проверку результата"
+  default_prompt: "Примени $checks low для проверки текущей задачи."
