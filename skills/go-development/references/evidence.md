@@ -135,3 +135,40 @@ Ardan Labs Press, 2021, Patch 41, ISBN 978-1-7373844-1-0. Использован
 Эти выводы заменены проверяемыми контрактами и version-aware критериями. При новой
 спорной детали читай актуальную первичную документацию/код и проверяй минимальный пример
 на toolchain проекта. Авторитет автора не заменяет correctness proof.
+
+## Go Development 0.5.0: внешние навыки как дополнения
+
+На 2026-11-10 выборочно изучены исходные инструкции следующих наборов. Ссылки
+закрепляют рассмотренную ревизию; это источники кандидатов, а не подключаемые зависимости.
+Включены собственные краткие критерии решений; чужие файлы и листинги не копировались.
+
+| Источник | Что использовано | Что не перенесено |
+|---|---|---|
+| [samber/cc-skills-golang](https://github.com/samber/cc-skills-golang/tree/d68d80aec298e1b74b37c2a472c002b5217248b3/skills) — concurrency, context, safety, testing, benchmark | Разбор lifecycle контекста и групп, cleanup тестов, числовых преобразований, инструментария измерений | Запрет указателей в каналах, безусловные defensive copies, полный набор библиотек и параллельный аудит |
+| [ECC golang-patterns](https://github.com/affaan-m/everything-claude-code/blob/d2ef2680594f9a17526a6e1a2e18b3d242c5d17b/skills/golang-patterns/SKILL.md) и [golang-testing](https://github.com/affaan-m/everything-claude-code/blob/d2ef2680594f9a17526a6e1a2e18b3d242c5d17b/skills/golang-testing/SKILL.md) | Проверяемые тестовые исходы, fuzz corpus и явные ошибки | Универсальные coverage targets, обязательный TDD для каждой правки, копирование примеров без проверки |
+| [Jeffallan golang-pro](https://github.com/Jeffallan/claude-skills/blob/078a25cc5bfd8011459be7b91d004e900c1d02d3/skills/golang-pro/SKILL.md) | Тематические справочники и проверка отмены/ошибок; это уже согласуется с нашей структурой | Обязательная оптимизация и профилирование в общем цикле, 80% покрытия |
+| [car12o golang](https://github.com/car12o/agents/blob/ec495d475a349ae28198fff5685313600006f83f/skills/golang/SKILL.md) | Сверка полноты тем ресурсов, I/O и version gates | Лимиты строк/методов, универсальные запреты DI/getters и неподтверждённые для проекта новые API |
+
+Приоритет остаётся у законченных операций, данных, ownership и соразмерной проверки
+этого навыка. Повторяющиеся советы о форматировании и именах не добавлены заново.
+Новые детали размещены в существующих справочниках, которые читаются по задаче.
+Выборочное изучение не является аудитом всех файлов наборов. Их опубликованные оценки
+не доказывают улучшение нашей версии или перенос эффекта на другую модель/репозиторий.
+
+Первичная сверка спорных деталей:
+
+- [context](https://pkg.go.dev/context): cancel, Cause, WithoutCancel и значения контекста.
+- [errgroup](https://pkg.go.dev/golang.org/x/sync/errgroup) и
+  [singleflight](https://pkg.go.dev/golang.org/x/sync/singleflight): завершение группы,
+  admission и объединение одновременных вызовов.
+- [testing](https://pkg.go.dev/testing) и [synctest](https://pkg.go.dev/testing/synctest):
+  Cleanup, parallel tests, Context, B.Loop и границы управления временем.
+- [benchstat](https://pkg.go.dev/golang.org/x/perf/cmd/benchstat): повторные samples
+  и сравнение статистик; смысл нагрузки остаётся ответственностью эксперимента.
+- [SQL queries](https://go.dev/doc/database/querying),
+  [transactions](https://go.dev/doc/database/execute-transactions) и
+  [net/http](https://pkg.go.dev/net/http): ресурсный lifetime и успешность операции.
+
+Документация latest помогает найти контракт, но доступность API и поведение драйвера
+проверяются для версии проекта. Проверки упаковки и самопроверка примеров не равны
+независимому поведенческому сравнению baseline/candidate.
